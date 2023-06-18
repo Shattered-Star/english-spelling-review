@@ -6,6 +6,7 @@ function element(selector){return document.querySelector(selector)}
 var spelling_list = ['Committee','Mississippi','Chaos','Battalion','Receive','Pneumonia','Psychology','Bureau','Occasion','Embarrassment','Omission','Jeopardy','Connecticut','Bugle','Chasm','Plateau','Rhythm','Acknowledge','Leopard','Accommodate','Liaison','Pronunciation','Hierarchy','Gauge','Harass','Questionnaire','Receipt','Sergeant','Vacuum','Exhilarate','Plague','Misspell','Debt','Indict','Queue','Baccalaureate','Fuchsia','Legalese','Pharaoh','Buffet','Occurrence','Onomatopoeia','Recommendation','Guarantee','Facade','Exaggerate','Jeopardize','Dilemma','Privilege','Ambiguous','Length','Panacea','Mawkish','Panache','Coalesce','Nuisance','Bouquet','Tomorrow','Asthma','Onomatopoeia','Ounce','Denouement','Colleague','Pastime','Quiet','Colonel','Viscount','Awry','Epitome','Cupboard','','Ragout','Segue','Hyperbole','Potpourri','Vignette','Choir','Denouement','Nuance','Fiery','Inoculate','Fluorescent','Questionnaire','Chauffeur','Connoisseur','Compliment','Gaiety','Espionage','Voyeurism','Bruise','Ricochet','Scurvy','Papyrus','Sublime','Think','Tank','Sequester','Leprechaun','Soliloquy','Bludgeon','Furlough','Culottes','Innuendo','Antediluvian','Soubrette','Appaloosa','Smaragdine','Abecedarian','Chartreuse','Oenophile','Zwinglian','Concurrence','Dissent','Meringue','Usurer','Lingerie','Lineage','Worcestershire Sauce','Terpsichorean','Bouillon','Prosciutto','Customer','Subpoena','Siege','Cache','Calzone','Gala','Gyro','Victual','Minute','Pococurante','Surround','Finite','Exiguous','Infamous','Debauch','Vamoose','Colloquium','Piquant','Gauche','Desuetude','Cognoscente','Picayune','Ratiocinate','Opine','Accoucheur','Cymotrichous','Prospicience','Eudaemonic','Panglossian','Zeitgeist','Louche','Bouillon','Vivace','Gauze','Spontaneity','Soiree','Naivete','Liaise','Gouge','Bough','Acrimonious','Commissioner','Concussion','Impugn','Asphyxiate','Bourgeois','Acquiesce','Chianti','Cachinnate','Kiribati']
 
 function ranWord(){return spelling_list[Math.floor(Math.random() * spelling_list.length)]}
+function TTS(pronounce){}
 
 points = 0
 
@@ -17,27 +18,34 @@ speechSynthesis.speak(msg);
 
 function checkAnswer(){
 	if (spell == document.querySelector('input.answer').value){
-		console.log('Correct!')
+		console.log('Correct! Word: '+ spell)
 		points++
 		document.querySelector('p.points').innerText = 'Points: '+points
-		alert('Correct!')
 	}
 	else {
 		console.log('Wrong! Correct answer is: ' + spell)
-		points = points-1
+		points = 0
 		document.querySelector('p.points').innerText = 'Points: '+points
 		alert('Wrong! Correct answer is: ' + spell)
 	}
+	document.querySelector('input.answer').value = ''
 }
 
 
 
 element('body').innerHTML = `
 <p class="points">Points: `+points+`</p>
-<input type='text' class='answer' spellcheck="false"></input>
+<input type='text' class='answer' spellcheck="false" onkeydown="search(this)"></input>
 <p><a href='javascript:checkAnswer(); start()'>Answer</a></p>
 <p><a href='javascript:var msg = new SpeechSynthesisUtterance(spell);speechSynthesis.speak(msg);'>Repeat</a></p>
 `
+
+function search(ele) {
+    if(event.key === 'Enter') {
+		checkAnswer()
+		start()
+    }
+}
 
 start()
 
